@@ -15,6 +15,22 @@ public class MethodTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
+    public void byteBufferArrayCanReturnedPrimitiveArray() {
+        loadScript("var ByteBuffer = Java.use('java.nio.ByteBuffer');" +
+                "var array = Java.array('byte', [1, 4, 7]);" +
+                "var byteBuffer = ByteBuffer.wrap(array);" +
+                "var pending = byteBuffer.array();" +
+                "send(pending.length);" +
+                "send(pending[0]);" +
+                "send(pending[1]);" +
+                "send(typeof pending[3]);");
+        assertEquals("3", script.getNextMessage());
+        assertEquals("1", script.getNextMessage());
+        assertEquals("4", script.getNextMessage());
+        assertEquals("undefined", script.getNextMessage());
+    }
+
+    @Test
     public void overloadCanBeSpecified() {
         loadScript("var Overloader = Java.use('re.frida.Overloader');" +
                 "var overloader = Overloader.$new();" +
